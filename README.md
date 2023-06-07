@@ -2,4 +2,4 @@
 Instructions for using Piccolo feature selection and normalization for Seurat
 
 
-![Alt text]()
+![Alt text](https://github.com/Amartya101/Piccolo-With-Seurat/blob/main/SCTv2_UMAPs.png)
