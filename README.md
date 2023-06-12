@@ -120,27 +120,86 @@ pbmc3k <- Seurat::RunUMAP(pbmc3k, dims = 1:50)
 Seurat::DimPlot(pbmc3k, reduction = "umap")
 ```
 ![Alt text](https://github.com/Amartya101/Piccolo-With-Seurat/blob/main/PBMC3k_PiccoloSeurat_UMAP.png)
+
+## Instructions for use with Seurat for data integration
+
+In order to illustrate how one can employ Piccolo to perform a data integration with Seurat, we rely on the vignette prepared for the [SCTransform v2 regularization](https://satijalab.org/seurat/articles/sctransform_v2_vignette.html). In that vignette, we used the SCTransform v2 based workflow to perform a comparative analysis of human immune cells (PBMC) in either a [resting or interferon-stimulated state](https://www.nature.com/articles/nbt.4042).
+
+### Import data in Seurat object format (from SeuratData package)
+```
+ifnb <- SeuratData::LoadData("ifnb")
+```
+### Split data based on stimulation status
+```
+ifnb.list <- Seurat::SplitObject(ifnb, split.by = "stim")
+```
+### Use SCTransform for the data sets corresponding to the 2 conditions
+```
+#Create SCT assays for the list elements
+ifnb.list <- lapply(X = ifnb.list, FUN = function(x) {
+  x <- Seurat::SCTransform(x,vst.flavor = "v2")
+})
+```
+
+### Use Piccolo to perform feature selection and normalization
+
+```
+ifnb.list <- lapply(X = ifnb.list, FUN = function(x) {
+  x <- Piccolo::SelectFeaturesForSeurat(x)
+})
+
+ifnb.list <- lapply(X = ifnb.list, FUN = function(x) {
+  x <- Piccolo::NormalizeForSeurat(x)
+})
+```
+
+### Identify anchor features for performing integration
+```
+anchorfeatures <- Seurat::SelectIntegrationFeatures(object.list = ifnb.list, nfeatures = 3000)
+
+CommonFeaturesAcrossLists <- lapply(X = ifnb.list, FUN = function(x) {
+  y <- rownames(x@assays$SCT@scale.data)
+  return(y)
+})
+
+CommonFeaturesAcrossLists <- Reduce(intersect,CommonFeaturesAcrossLists)
+
+anchorfeatures <- intersect(anchorfeatures,CommonFeaturesAcrossLists)
+```
+
+### Perform data integration
+```
+
+ifnb.list <- Seurat::PrepSCTIntegration(object.list = ifnb.list, anchor.features = anchorfeatures,assay = "SCT")
+
+immune.anchors <- Seurat::FindIntegrationAnchors(object.list = ifnb.list, normalization.method = "SCT",anchor.features = anchorfeatures)
+immune.combined.sct <- Seurat::IntegrateData(anchorset = immune.anchors, normalization.method = "SCT")
+```
+
+### Perform dimensionality reduction and clustering on integrated data
+```
+#Run a single integrated analysis on all cells
+immune.combined.sct <- Seurat::RunPCA(immune.combined.sct, verbose = FALSE)
+immune.combined.sct <- Seurat::RunUMAP(immune.combined.sct, reduction = "pca", dims = 1:50, verbose = FALSE)
+immune.combined.sct <- Seurat::FindNeighbors(immune.combined.sct, reduction = "pca", dims = 1:50)
+immune.combined.sct <- Seurat::FindClusters(immune.combined.sct, resolution = 0.5)
+```
+
+### Visualization
+To visualize the distribution of annotated celltypes across control and stimulated datasets:
+```
+p1 <- DimPlot(immune.combined.sct, reduction = "umap", group.by = "stim")
+p2 <- DimPlot(immune.combined.sct, reduction = "umap", group.by = "seurat_clusters", label = TRUE,
+    repel = TRUE)
+p3 <- DimPlot(immune.combined.sct, reduction = "umap", group.by = "seurat_annotations", label = TRUE,
+    repel = TRUE)
+p1 | p2 | p3
+```
+The plots we obtain with Piccolo:
 ![Alt text](https://github.com/Amartya101/Piccolo-With-Seurat/blob/main/Piccolo_UMAPs.png)
+For comparison, we show the plots obtained with SCTransform (v2):
 ![Alt text](https://github.com/Amartya101/Piccolo-With-Seurat/blob/main/SCTv2_UMAPs.png)
 
-### Label cells on UMAP
-The *LabelUMAP* function can be used to make the UMAP plots and color the cells based on labels provided by the user. *Labels* should contain the character labels for all the cells in the same order as the cells in the counts matrix.
-
-Examples of valid function calls are provided below:
-
-```
-CellLabels <- c("b-cells","b-cells",..,"cd14 monocytes",..,"NK cells",..)
-p <- LabelUMAP(PiccoloList = pbmc3k,
- Labels = CellLabels,
- Levels = c("b-cells","cd14 monocytes","dendritic","NK cells","naive cytotoxic"),
- Title = "PBMC3k")
-
-p
-
-p <- LabelUMAP(PiccoloList = pbmc3k, Labels = PiccoloList$ClusterLabels,Title = "PBMC3k")
-
-p
-```
 
 ### Perform differential expression analysis between 2 groups of cells
 The *PerformDiffExp* function employs either the Student's t-test (by specifying *Method = "t.test"*) or the Wilcoxon rank-sum test (by specifying *Method = "wilcoxon"*) to determine whether any of the given features are differentially expressed between 2 groups of cells specified by the user. *Group1* and *Group2* should contain the serial numbers of cells that belong to the respective groups.
