@@ -123,7 +123,7 @@ Seurat::DimPlot(pbmc3k, reduction = "umap")
 
 ## Instructions for use with Seurat for data integration
 
-In order to illustrate how one can employ Piccolo to perform a data integration with Seurat, we rely on the vignette prepared for the [SCTransform v2 regularization](https://satijalab.org/seurat/articles/sctransform_v2_vignette.html). In that vignette, we used the SCTransform v2 based workflow to perform a comparative analysis of human immune cells (PBMC) in either a [resting or interferon-stimulated state](https://www.nature.com/articles/nbt.4042).
+In order to illustrate how one can employ Piccolo to perform a data integration with Seurat, we rely on the vignette prepared for the [SCTransform v2 regularization](https://satijalab.org/seurat/articles/sctransform_v2_vignette.html). In that vignette, the SCTransform v2 based workflow was used to perform a comparative analysis of human immune cells (PBMC) in either a [resting or interferon-stimulated state](https://www.nature.com/articles/nbt.4042).
 
 ### Import data in Seurat object format (from SeuratData package)
 ```
@@ -199,6 +199,7 @@ The plots we obtain with Piccolo:
 ![Alt text](https://github.com/Amartya101/Piccolo-With-Seurat/blob/main/Piccolo_UMAPs.png)
 For comparison, we show the plots obtained with SCTransform (v2):
 ![Alt text](https://github.com/Amartya101/Piccolo-With-Seurat/blob/main/SCTv2_UMAPs.png)
+The cleaner separation of NK cells with Piccolo is immediately apparent.
 
 
 ### Perform differential expression analysis between 2 groups of cells
