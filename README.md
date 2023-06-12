@@ -195,9 +195,9 @@ p3 <- DimPlot(immune.combined.sct, reduction = "umap", group.by = "seurat_annota
     repel = TRUE)
 p1 | p2 | p3
 ```
-The plots we obtain with Piccolo:
+The UMAP plots we obtain with Piccolo:
 ![Alt text](https://github.com/Amartya101/Piccolo-With-Seurat/blob/main/Piccolo_UMAPs.png)
-For comparison, we show the plots obtained with SCTransform (v2):
+For comparison, we show the UMAP plots obtained with SCTransform (v2):
 ![Alt text](https://github.com/Amartya101/Piccolo-With-Seurat/blob/main/SCTv2_UMAPs.png)
 The cleaner separation of NK cells with Piccolo is immediately apparent.
 
