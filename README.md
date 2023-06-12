@@ -17,6 +17,18 @@ Once **devtools** is installed, run the following to install **Piccolo**:
 ```
 devtools::install_github("Amartya101/Piccolo")
 ```
+In addition to Piccolo, to use Seurat you'll need to install Seurat (v4) from CRAN:
+```
+install.packages("Seurat")
+```
+We also rely on SeuratData package for this tutorial, which can be installed from their GitHub repository ([seurat-disk](https://github.com/mojaveazure/seurat-disk)) using:
+```
+if (!requireNamespace("remotes", quietly = TRUE)) {
+  install.packages("remotes")
+}
+remotes::install_github("mojaveazure/seurat-disk")
+```
+
 ## Instructions for use with Seurat
 
 The central object in the Piccolo workflow is the PiccoloList. Given the single-cell gene expression data in the .mtx or .mtx.gz format (and the corresponding features and barcodes .tsv files), we first need to create a PiccoloList that contains the matrix and the information about the features and barcodes. This can be done with the *CreatePiccoloList* function.
