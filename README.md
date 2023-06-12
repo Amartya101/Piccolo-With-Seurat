@@ -104,7 +104,6 @@ pbmc3k <- NormalizeForSeurat(Obj = pbmc3k, Transform = "bc")
 ```
 
 ### Downstream analysis with Seurat
-
 The rest of the downstream analysis - running PCA, finding nearest neighbors, identifying clusters, obtaining UMAP projections etc - can be performed using Seurat.
 ```
 #Perform PCA
@@ -142,7 +141,6 @@ ifnb.list <- lapply(X = ifnb.list, FUN = function(x) {
 ```
 
 ### Use Piccolo to perform feature selection and normalization
-
 ```
 ifnb.list <- lapply(X = ifnb.list, FUN = function(x) {
   x <- Piccolo::SelectFeaturesForSeurat(x)
@@ -169,7 +167,6 @@ anchorfeatures <- intersect(anchorfeatures,CommonFeaturesAcrossLists)
 
 ### Perform data integration
 ```
-
 ifnb.list <- Seurat::PrepSCTIntegration(object.list = ifnb.list, anchor.features = anchorfeatures,assay = "SCT")
 
 immune.anchors <- Seurat::FindIntegrationAnchors(object.list = ifnb.list, normalization.method = "SCT",anchor.features = anchorfeatures)
