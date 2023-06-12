@@ -103,31 +103,23 @@ pbmc3k <- NormalizeForSeurat(Obj = pbmc3k)
 pbmc3k <- NormalizeForSeurat(Obj = pbmc3k, Transform = "bc")
 ```
 
-### Compute PCs and get UMAP coordinates
+### Downstream analysis with Seurat
 
-After the normalized counts have been obtained using the *Normalize* function, we can compute the principal components and generate the UMAP coordinates. The *ComputePC* function takes in the PiccoloList prepared by the *Normalize* function and by default gives the top 50 principal components. After the principal components are obtained and stored in the PiccoloList, we can apply the *UMAPcoords* function that takes in the PiccoloList and calculates the UMAP coordinates. 
-
-Examples of valid function calls:
+The rest of the downstream analysis - running PCA, finding nearest neighbors, identifying clusters, obtaining UMAP projections etc - can be performed using Seurat.
 ```
-pbmc3k <- ComputePC(PiccoloList = pbmc3k)
+#Perform PCA
+pbmc3k <- Seurat::RunPCA(pbmc3k, features = Seurat::VariableFeatures(object = pbmc3k))
 
-pbmc3k <- ComputePC(PiccoloList = pbmc3k,NoOfPC = 20,Out = T) # for Top 20 PCs, and will generate an output .csv file containing the PCs
+#Find shared nearest neighbours and identify clusters using Louvain graph-partitioning algorithm
+pbmc3k <- Seurat::FindNeighbors(pbmc3k, dims = 1:50)
+pbmc3k <- Seurat::FindClusters(pbmc3k, resolution = 1)
 
-pbmc3k <- UMAPcoords(PiccoloList = pbmc3k, Out = T)
+#Obtain UMAP coordinates for the cells
+pbmc3k <- Seurat::RunUMAP(pbmc3k, dims = 1:50)
+
+Seurat::DimPlot(pbmc3k, reduction = "umap")
 ```
-### Clustering
-After the principal components have been computed, we can use the *KNearestNeighbors* function to identify the *k* nearest-neighbors of every cell based on the PC coordinates (default *k* is 10). After obtaining the nearest-neighbors we can use graph-based partitioning algorithm such as Leiden to identify clusters of cells. This can be accomplished by using the *LeidenClustering* function. 
-
-Examples of valid function calls:
-
-```
-pbmc3k <- KNearestNeighbors(PiccoloList = pbmc3k)
-
-pbmc3k <- LeidenClustering(PiccoloList = pbmc3k)
-
-pbmc3k <- LeidenClustering(PiccoloList = pbmc3k,
- Resolution = 1.5)
-```
+![Alt text](https://github.com/Amartya101/Piccolo-With-Seurat/blob/main/Piccolo_UMAPs.png)
 ![Alt text](https://github.com/Amartya101/Piccolo-With-Seurat/blob/main/Piccolo_UMAPs.png)
 ![Alt text](https://github.com/Amartya101/Piccolo-With-Seurat/blob/main/SCTv2_UMAPs.png)
 
