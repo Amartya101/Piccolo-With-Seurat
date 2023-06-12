@@ -201,21 +201,6 @@ For comparison, we show the plots obtained with SCTransform (v2):
 ![Alt text](https://github.com/Amartya101/Piccolo-With-Seurat/blob/main/SCTv2_UMAPs.png)
 The cleaner separation of NK cells with Piccolo is immediately apparent.
 
-
-### Perform differential expression analysis between 2 groups of cells
-The *PerformDiffExp* function employs either the Student's t-test (by specifying *Method = "t.test"*) or the Wilcoxon rank-sum test (by specifying *Method = "wilcoxon"*) to determine whether any of the given features are differentially expressed between 2 groups of cells specified by the user. *Group1* and *Group2* should contain the serial numbers of cells that belong to the respective groups.
-
-Example of a valid function call is provided below:
-
-```
-Group1.vec <- 1:200
-Group2.vec <- 301:500
-pbmc3k <- PerformDiffExp(PiccoloList = pbmc3k,
- Group1 = Group1.vec,
- Group2 = Group2.vec,
- Out = T)
-```
-
 ## Authors
 
 * **Amartya Singh** - [Amartya101](https://github.com/Amartya101/)
