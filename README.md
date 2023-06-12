@@ -119,7 +119,7 @@ pbmc3k <- Seurat::RunUMAP(pbmc3k, dims = 1:50)
 
 Seurat::DimPlot(pbmc3k, reduction = "umap")
 ```
-![Alt text](https://github.com/Amartya101/Piccolo-With-Seurat/blob/main/PBMC3k_PiccoloSeurat_UMAP.png)
+![Alt text](https://github.com/Amartya101/Piccolo-With-Seurat/blob/main/PBMC3k_PiccoloSeuratUMAP.png)
 
 ## Instructions for use with Seurat for data integration
 
