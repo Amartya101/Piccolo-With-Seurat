@@ -17,7 +17,7 @@ Once **devtools** is installed, run the following to install **Piccolo**:
 ```
 devtools::install_github("Amartya101/Piccolo")
 ```
-In addition to Piccolo, to use Seurat you'll need to install Seurat (v4) from CRAN:
+In addition to Piccolo, to use Seurat you'll need to install Seurat from CRAN (currently Piccolo has been set up for use with v4 and not the latest development version v5)):
 ```
 install.packages("Seurat")
 ```
