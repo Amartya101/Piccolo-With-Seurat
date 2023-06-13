@@ -78,7 +78,6 @@ The *SCTransform* function in Seurat is used to prepare an SCT assay in the Seur
 Example of a valid function call is given below:
 ```
 pbmc3k <- Seurat::SCTransform(object = pbmc3k,vst.flavor = "v2")
-#This turns PiccoloList into a Seurat object
 ```
 
 ### SelectFeaturesForSeurat
