@@ -64,7 +64,7 @@ pbmc3k <- PrepareCountsForSeurat(PiccoloList = pbmc3k)
 ```
 
 ### CreateSeuratObject (from Seurat package)
-The *PCreateSeuratObject* function in Seurat prepares a Seurat object using a counts matrix as input.
+The *CreateSeuratObject* function in Seurat prepares a Seurat object using a counts matrix as input.
 
 Example of a valid function call is given below:
 ```
